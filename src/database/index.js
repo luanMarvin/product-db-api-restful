@@ -1,12 +1,21 @@
 const mongoose = require("mongoose");
 
-function connect(){
-    mongoURI = "mongodb://localhost:27017/products-database";
-    mongoose.connect(mongoURI);
-    const db = mongoose.connection
+function connect() {
+    const mongoURI = 'mongodb://127.0.0.1:27017/products-database';
 
+    mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log(`Connectado ao: ${mongoURI}`);
+    })
+    .catch((error) => {
+        console.error('Erro:', error);
+    });
 
-    db.once("open", ()=>{console.log(`Connected to ${mongoURI}`)})
+    const db = mongoose.connection;
+
+    db.on("error", (error) => {
+        console.error("Erro:", error);
+    });
 }
 
-module.exports = {connect};
+module.exports = { connect };
